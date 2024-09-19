@@ -10,6 +10,7 @@
   "author": "ellen-lee-goorm <ellen.lee@goorm.io>",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^8.1.8"
+    "lerna": "^8.1.8",
+    "typescript": "^5.6.2"
   }
 }
