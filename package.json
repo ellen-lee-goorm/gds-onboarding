@@ -1,0 +1,15 @@
+{
+  "name": "gds-onboarding",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "main": "index.js",
+  "repository": "https://github.com/ellen-lee-goorm/gds-onboarding.git",
+  "author": "ellen-lee-goorm <ellen.lee@goorm.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^8.1.8"
+  }
+}
