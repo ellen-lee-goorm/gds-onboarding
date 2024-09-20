@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+
+    "declaration": true,
+    "declarationMap": false,
+
+    "strict": true
+  },
+  "include": ["packages/**/*"],
+  "exclude": ["**/node_modules", "**/dist"]
+}
