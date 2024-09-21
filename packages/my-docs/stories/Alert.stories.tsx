@@ -8,14 +8,14 @@ const meta: Meta<AlertProps> = {
   component: Alert,
   tags: ['autodocs'],
   argTypes: {
-    status: {
+    color: {
       control: {
         type: 'select',
       },
     },
   },
   args: {
-    status: 'primary',
+    color: 'primary',
   },
 };
 
@@ -26,7 +26,7 @@ const Template = (args: AlertProps) => <Alert {...args} />;
 export const Primary: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'primary',
+    color: 'primary',
     children: 'This is a primary alert',
   },
 };
@@ -34,7 +34,7 @@ export const Primary: StoryObj<AlertProps> = {
 export const Secondary: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'secondary',
+    color: 'secondary',
     children: 'This is a secondary alert',
   },
 };
@@ -42,7 +42,7 @@ export const Secondary: StoryObj<AlertProps> = {
 export const Success: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'success',
+    color: 'success',
     children: 'This is a success alert',
   },
 };
@@ -50,7 +50,7 @@ export const Success: StoryObj<AlertProps> = {
 export const Warning: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'warning',
+    color: 'warning',
     children: 'This is a warning alert',
   },
 };
@@ -58,7 +58,7 @@ export const Warning: StoryObj<AlertProps> = {
 export const Danger: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'danger',
+    color: 'danger',
     children: 'This is a danger alert',
   },
 };
@@ -66,7 +66,7 @@ export const Danger: StoryObj<AlertProps> = {
 export const Dark: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'dark',
+    color: 'dark',
     children: 'This is a dark alert',
   },
 };
@@ -74,7 +74,7 @@ export const Dark: StoryObj<AlertProps> = {
 export const Hint: StoryObj<AlertProps> = {
   render: Template,
   args: {
-    status: 'hint',
+    color: 'hint',
     children: 'This is a hint alert',
   },
 };

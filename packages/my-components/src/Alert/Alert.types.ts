@@ -1,15 +1,15 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
-export type AlertStatus =
-  | "primary"
-  | "secondary"
-  | "success"
-  | "warning"
-  | "danger"
-  | "dark"
-  | "hint";
+export type AlertColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'dark'
+  | 'hint';
 
 export interface AlertProps {
-  status: AlertStatus;
+  color: AlertColor;
   children: ReactNode;
 }
