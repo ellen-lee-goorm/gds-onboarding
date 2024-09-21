@@ -13,3 +13,5 @@ dist
 # etc
 .DS_Store
 .vscode/
+
+*storybook.log
