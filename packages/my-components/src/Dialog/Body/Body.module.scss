@@ -1,0 +1,12 @@
+.body {
+  display: inline-block;
+  width: 100%;
+
+  padding: 0px var(--space-300);
+
+  background-color: var(--background-alternative-02);
+}
+
+.expanded {
+  padding: 0;
+}
