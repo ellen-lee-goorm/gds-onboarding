@@ -1,17 +1,42 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import json from '@rollup/plugin-json';
+import postcss from 'rollup-plugin-postcss';
+import typescript from '@rollup/plugin-typescript';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 
 export default {
-  input: 'src/index.ts', // 입력 파일
-  output: {
-    file: 'dist/bundle.js', // 출력 파일
-    format: 'umd', // 모듈 형식
-    name: 'MyLibrary', // 라이브러리 이름
-  },
+  input: 'src/index.ts',
+  output: [
+    {
+      file: 'dist/cjs/index.js',
+      format: 'cjs',
+    },
+    {
+      file: 'dist/esm/index.js',
+      format: 'es',
+    },
+  ],
   plugins: [
-    resolve(), // Node 모듈 해결
-    commonjs(), // CommonJS 모듈 변환
-    terser(), // 코드 압축
+    json(),
+    postcss({
+      extension: ['.css', '.scss'],
+      use: [['sass']],
+      plugins: [autoprefixer()],
+      minimize: true,
+    }),
+    typescript(),
+    nodeResolve(),
+    commonjs(),
+    babel({
+      babelHelpers: 'runtime',
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      presets: [['react-app', { flow: false, typescript: true }]],
+      // exclude
+    }),
+    terser(),
+    peerDepsExternal(),
   ],
 };

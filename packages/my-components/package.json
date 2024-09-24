@@ -1,7 +1,9 @@
 {
   "name": "my-components",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",
