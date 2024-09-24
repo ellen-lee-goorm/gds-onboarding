@@ -4,7 +4,7 @@ export type DialogContentsProps = Pick<
   React.HTMLProps<HTMLDivElement>,
   'className' | 'style'
 > & {
-  maxHeight: string | number;
+  maxHeight: string;
   children: ReactNode;
 };
 
