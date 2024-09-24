@@ -1,12 +1,16 @@
 import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { CloseType } from './Close.types';
+import { DialogCloseType } from './Close.types';
 import styles from './Close.module.scss';
 import '../../../index.css';
 
-const Close = ({ children }: CloseType) => {
+const Close = ({ children, className, style }: DialogCloseType) => {
   return (
-    <Dialog.Close asChild className={styles.close}>
+    <Dialog.Close
+      asChild
+      className={`${styles.close} ${className}`}
+      style={style}
+    >
       <button>{children}</button>
     </Dialog.Close>
   );

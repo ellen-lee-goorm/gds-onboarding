@@ -3,8 +3,12 @@ import React from 'react';
 import { DialogTitleProps } from './Title.types';
 import styles from './Title.module.scss';
 
-const Title = ({ children }: DialogTitleProps) => {
-  return <DialogTitle className={`${styles.title}`}>{children}</DialogTitle>;
+const Title = ({ children, className, style }: DialogTitleProps) => {
+  return (
+    <DialogTitle className={`${styles.title} ${className}`} style={style}>
+      {children}
+    </DialogTitle>
+  );
 };
 
 export default Title;

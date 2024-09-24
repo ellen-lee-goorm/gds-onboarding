@@ -1,5 +1,8 @@
 import { ReactNode } from 'react';
 
-export type DialogHeaderProps = {
+export type DialogHeaderProps = Pick<
+  React.HTMLProps<HTMLDivElement>,
+  'className' | 'style'
+> & {
   children: ReactNode;
 };

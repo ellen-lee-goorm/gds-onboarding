@@ -1,6 +1,9 @@
 import { ReactNode } from 'react';
 
-export type DialogContentsProps = {
+export type DialogContentsProps = Pick<
+  React.HTMLProps<HTMLDivElement>,
+  'className' | 'style'
+> & {
   maxHeight: string | number;
   children: ReactNode;
 };

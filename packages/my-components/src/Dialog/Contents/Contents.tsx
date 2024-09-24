@@ -9,7 +9,12 @@ import styles from './Contents.module.scss';
 import '../../../index.css';
 import { useDialogContext } from '../Dialog.context';
 
-const Contents = ({ maxHeight = '80vh', children }: DialogContentsProps) => {
+const Contents = ({
+  maxHeight = '80vh',
+  children,
+  className,
+  style,
+}: DialogContentsProps) => {
   const { size, scrimClickable } = useDialogContext();
 
   const handleOpenOverlay = (event: PointerDownOutsideEvent) => {
@@ -22,8 +27,8 @@ const Contents = ({ maxHeight = '80vh', children }: DialogContentsProps) => {
       <DialogOverlay className={`${styles.overlay}`}>
         <DialogContent
           onPointerDownOutside={handleOpenOverlay}
-          style={{ maxHeight: maxHeight }}
-          className={`${styles.contents} ${styles[`contents-${size}`]}`}
+          style={{ maxHeight: maxHeight, ...style }}
+          className={`${styles.contents} ${styles[`contents-${size}`]} ${className}`}
         >
           {children}
         </DialogContent>
