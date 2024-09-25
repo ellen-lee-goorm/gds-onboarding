@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DialogContentsProps, PointerDownOutsideEvent } from './Contents.types';
 import {
   Portal as DialogPortal,
@@ -6,7 +6,6 @@ import {
   Content as DialogContent,
 } from '@radix-ui/react-dialog';
 import styles from './Contents.module.scss';
-import '../../../index.css';
 import { useDialogContext } from '../Dialog.context';
 
 const Contents = ({
