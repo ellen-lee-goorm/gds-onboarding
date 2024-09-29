@@ -1,13 +1,13 @@
-import { DialogDescription } from '@radix-ui/react-dialog';
 import React from 'react';
+import { DialogDescription } from '@radix-ui/react-dialog';
 import { DialogDescriptionProps } from './Description.types';
 import styles from './Description.module.scss';
 
-const Description = ({
+export default function Description({
   children,
   className,
   style,
-}: DialogDescriptionProps) => {
+}: DialogDescriptionProps) {
   return (
     <DialogDescription
       className={`${styles.description} ${className}`}
@@ -16,6 +16,4 @@ const Description = ({
       {children}
     </DialogDescription>
   );
-};
-
-export default Description;
+}

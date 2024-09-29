@@ -5,11 +5,11 @@ import { Root as DialogRoot } from '@radix-ui/react-dialog';
 import Contents from './Contents';
 import Trigger from './Trigger';
 import Header from './Header';
-import Body from './Body/Body';
-import Footer from './Footer/Footer';
+import Body from './Body';
+import Footer from './Footer';
 import Close from './Close';
 import Title from './Title';
-import Description from './Description/Description';
+import Description from './Description';
 
 export default function Dialog({
   size = 'md',
