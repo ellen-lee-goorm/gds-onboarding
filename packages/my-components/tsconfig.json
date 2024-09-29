@@ -1,9 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist/types",
     "declaration": true,
-    "moduleResolution": "node"
+    "declarationMap": false,
+    "outDir": "./dist/types",
+    "emitDeclarationOnly": true
   },
-  "include": ["./**/*", "../../declarations.d.ts"]
+  "include": ["./", "../../declarations.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

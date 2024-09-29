@@ -2,16 +2,19 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "ESNext",
-
+    "lib": ["es6", "DOM", "ES2016", "ES2017"],
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strict": true,
     "declaration": true,
+    // "declarationDir": "./dist/types",
     "declarationMap": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "jsx": "react", 
-    "moduleResolution": "node",
-
-    "strict": true
+    "jsx": "react-jsx",
+    "moduleResolution": "node"
   },
   "include": ["packages/**/*", "declarations.d.ts"],
-  "exclude": ["**/node_modules", "**/dist"]
+  "exclude": ["*.config.*", "**/node_modules", "**/dist", "*.json"]
 }
