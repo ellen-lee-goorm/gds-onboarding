@@ -1,12 +1,21 @@
 {
   "name": "my-components",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "type": "module",
   "license": "MIT",
-  "dependencies": {},
+  "scripts": {
+    "build": "npm run build:typings && NODE_ENV=production rollup -c ../../rollup.config.js",
+    "build:typings": "rm -rf dist/ && tsc -p ./tsconfig.json --emitDeclarationOnly"
+  },
   "devDependencies": {},
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.6"
   }
 }

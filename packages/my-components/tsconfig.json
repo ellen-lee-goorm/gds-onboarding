@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist/types",
     "declaration": true,
+    "declarationMap": false,
     "moduleResolution": "node"
   },
-  "include": ["./**/*", "../../declarations.d.ts"]
+  "include": ["./**/*", "../../declarations.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
