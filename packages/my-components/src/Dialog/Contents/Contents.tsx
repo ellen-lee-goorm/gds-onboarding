@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DialogContentsProps, PointerDownOutsideEvent } from './Contents.types';
 import {
   Portal as DialogPortal,
@@ -9,12 +9,12 @@ import styles from './Contents.module.scss';
 import '../../../index.css';
 import { useDialogContext } from '../Dialog.context';
 
-const Contents = ({
+export default function Contents({
   maxHeight = '80vh',
   children,
   className,
   style,
-}: DialogContentsProps) => {
+}: DialogContentsProps) {
   const { size, scrimClickable } = useDialogContext();
 
   const handleOpenOverlay = (event: PointerDownOutsideEvent) => {
@@ -35,6 +35,4 @@ const Contents = ({
       </DialogOverlay>
     </DialogPortal>
   );
-};
-
-export default Contents;
+}

@@ -7,7 +7,7 @@ import { DialogContentsProps } from '../../my-components/src/Dialog/Contents/Con
 
 type DialogType = DialogProps & DialogBodyProps & DialogContentsProps;
 const meta: Meta<DialogType> = {
-  title: 'Dialog/Dialog',
+  title: 'Dialog',
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {
