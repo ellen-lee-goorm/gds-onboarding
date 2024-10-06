@@ -1,11 +1,23 @@
 {
-  "name": "my-components",
+  "name": "@ellen-lee-goorm/my-components",
   "version": "1.0.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "type": "module",
   "license": "MIT",
+  "author": "ellen-lee-goorm",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ellen-lee-goorm/gds-onboarding.git",
+    "directory": "packages/my-components"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "build": "npm run build:typings && NODE_ENV=production rollup -c ../../rollup.config.js",
     "build:typings": "rm -rf dist/ && tsc -p ./tsconfig.json --emitDeclarationOnly"

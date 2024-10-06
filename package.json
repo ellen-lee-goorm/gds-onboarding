@@ -6,7 +6,6 @@
     "packages/*"
   ],
   "type": "module",
-  "repository": "https://github.com/ellen-lee-goorm/gds-onboarding.git",
   "author": "ellen-lee-goorm <ellen.lee@goorm.io>",
   "license": "MIT",
   "scripts": {
