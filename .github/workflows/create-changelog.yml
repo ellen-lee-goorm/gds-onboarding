@@ -23,3 +23,12 @@ jobs:
 
       - name: Run Lerna version
         run: yarn version
+
+      - name: Commit and push CHANGELOG.md
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG.md"
+          git push origin release/${{ github.ref_name }}
+
