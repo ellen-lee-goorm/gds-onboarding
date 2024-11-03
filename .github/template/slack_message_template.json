@@ -5,7 +5,7 @@
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "{{ sprint_number }} 스프린트 릴리즈 열차가 출발합니다 🚂",
+        "text": "{{sprint_number}} 스프린트 릴리즈 열차가 출발합니다 🚂",
         "emoji": true
       }
     },
@@ -13,7 +13,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{ branch_name }}|release/${{ branch_name }}>"
+        "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{branch_name}}|release/${{branch_name}}>"
       }
     },
     {
@@ -27,7 +27,7 @@
           "elements": [
             {
               "type": "text",
-              "text": "{{ sprint_number }} 스프린트에는 ...",
+              "text": "{{sprint_number}} 스프린트에는 ...",
               "style": {
                 "bold": true
               }
