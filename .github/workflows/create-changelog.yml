@@ -49,7 +49,7 @@ jobs:
 
       - name: Start Release with git flow
         run: |
-          git flow init
+          git flow init -d
           git flow release start ${{ env.today_date }}
           yarn version --yes
           git flow release publish ${{ env.today_date }}
@@ -76,8 +76,10 @@ jobs:
             ./github/template/slack_message_template.json | \
             jq '.blocks[1].text.text |= gsub("{{branch_name}}"; $branch_name))
 
+          echo "Slack Payload: $(echo "$slack_payload" | jq .)"
+
           # Slack에 메시지 전송
-          curl -X POST -H 'Content-type: application/json' --data "$slack_payload" ${{ secrets.SLACK_WEBHOOK_URL }}
+          # curl -X POST -H 'Content-type: application/json' --data "$slack_payload" ${{ secrets.SLACK_WEBHOOK_URL }}
 
       #     cat ./github/template/slack_message_template.json | \
       #     jq --arg branch_name "$branch_name" \
