@@ -1,0 +1,25 @@
+name: 정기 릴리즈를 위한 ChangeLog 생성
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.20.0'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run Lerna version
+        run: yarn version
