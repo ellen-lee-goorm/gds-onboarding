@@ -2,6 +2,11 @@ name: 정기 릴리즈를 위한 ChangeLog 생성
 
 on:
   workflow_dispatch:
+    inputs:
+      sprint_number:
+        description: '스프린트 번호'
+        required: true
+        default: '90'
   # schedule:
   #   - cron: "0 9 * * 1"  # 예: 매주 월요일 오전 9시에 실행 (UTC 기준)
   # push:
@@ -51,9 +56,13 @@ jobs:
         run: |
           echo "Today date is: ${{ env.today_date }}"
           git flow init -d
+          echo "Done: git flow init"
           git flow release start ${{ env.today_date }}
-          yarn version --yes
+          echo "Done: git flow release start"
           git flow release publish ${{ env.today_date }}
+          echo "Done: git flow release publish"
+          yarn version --yes
+          echo "Done: yarn version"
 
       - name: Commit and push CHANGELOG.md
         run: |
@@ -67,30 +76,124 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Generate Slack Message JSON
-        id: generate_message
-        run: |
-          # 템플릿 파일을 불러오고, 필요한 변수 치환
-          branch_name="${{ github.ref_name }}"
+      - name: Send Slack Message
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: ${{ secrets.TEST_CHANNEL_ID }}
+          payload: |
+            {
+              "text": "release message",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "${{github.event.inputs.sprint_number}} 스프린트 릴리즈 열차가 출발합니다 🚂",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{ github.ref_name }}|release/${{ github.ref_name }}>"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "rich_text",
+                  "elements": [
+                    {
+                      "type": "rich_text_section",
+                      "elements": [
+                        {
+                          "type": "text",
+                          "text": "${{github.event.inputs.sprint_number}} 스프린트에는 ...",
+                          "style": {
+                            "bold": true
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "text": "\n\n"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rich_text_list",
+                      "style": "bullet",
+                      "indent": 0,
+                      "border": 0,
+                      "elements": [
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "승인"
+                      },
+                      "style": "primary",
+                      "value": "accept release"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "거절"
+                      },
+                      "style": "danger",
+                      "value": "reject release"
+                    }
+                  ]
+                }
+              ]
+            }
 
-          slack_payload=$(jq --arg branch_name "$branch_name" \
-            < .github/template/slack_message_template.json | \
-            jq '.blocks[1].text.text |= gsub("{{branch_name}}"; $branch_name)')
-
-
-          echo "Slack Payload: $(echo "$slack_payload" | jq .)"
-
-          # Slack에 메시지 전송
-          # curl -X POST -H 'Content-type: application/json' --data "$slack_payload" ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      #     cat ./github/template/slack_message_template.json | \
-      #     jq --arg branch_name "$branch_name" \
-      #     > ./github/slack_message.json
-
-      # - name: Send Slack Message
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     channel-id: ${{ secrets.TEST_CHANNEL_ID }}
-      #     payload: file://slack_message.json
-      #   env:
-      #     SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
