@@ -1,9 +1,12 @@
 name: 정기 릴리즈를 위한 ChangeLog 생성
 
 on:
-  push:
-    branches:
-      - 'release/*'
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 9 * * 1"  # 예: 매주 월요일 오전 9시에 실행 (UTC 기준)
+  # push:
+  #   branches:
+  #     - 'release/*'
 
 jobs:
   release:
@@ -13,145 +16,76 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Update remote branches
+        run: git remote update
+
+      - name: Checkout and update develop branch
+        run: |
+          git checkout develop
+          git pull origin develop
+
+      - name: Checkout and update master branch
+        run: |
+          git checkout master
+          git pull origin master
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18.20.0'
 
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Install git flow
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-flow
+
+      - name: Get today's date
+        id: get_date
+        run: |
+          echo "today_date=$(node .scripts/date.js)" >> $GITHUB_ENV
+
+      - name: Start Release with git flow
+        run: |
+          git flow release start ${{ env.today_date }}
+          yarn version --yes
+          git flow release publish ${{ env.today_date }}
+
+      - name: Commit and push CHANGELOG.md
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG.md"
+          git push origin release/${{ github.ref_name }}
+
   slack-alarm:
     runs-on: ubuntu-latest
 
     steps:
-      - name: slack 메시지 전송
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          channel-id: ${{ secrets.TEST_CHANNEL_ID }}
-          payload: |
-            {
-              "text": "release message",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "00 스프린트 릴리즈 열차가 도착했습니다 🚂",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "브랜치: <https://www.goorm.io/dashboard|release/20241103>"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "rich_text",
-                  "elements": [
-                    {
-                      "type": "rich_text_section",
-                      "elements": [
-                        {
-                          "type": "text",
-                          "text": "00 스프린트에는 ...",
-                          "style": {
-                            "bold": true
-                          }
-                        },
-                        {
-                          "type": "text",
-                          "text": "\n\n"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "rich_text_list",
-                      "style": "bullet",
-                      "indent": 0,
-                      "border": 0,
-                      "elements": [
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "emoji": true,
-                        "text": "승인"
-                      },
-                      "style": "primary",
-                      "value": "accept release"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "emoji": true,
-                        "text": "거절"
-                      },
-                      "style": "danger",
-                      "value": "reject release"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
-      # - name: Install dependencies
-      #   run: yarn install
+      - name: Generate Slack Message JSON
+        id: generate_message
+        run: |
+          # 템플릿 파일을 불러오고, 필요한 변수 치환
+          branch_name="${{ github.ref_name }}"
 
-      # - name: Run Lerna version
-      #   run: yarn version
+          slack_payload=$(jq --arg branch_name "$branch_name" \
+            < ./github/template/slack_message_template.json | \
+            jq '.blocks[1].text.text |= gsub("{{branch_name}}"; $branch_name))
 
-      # - name: Commit and push CHANGELOG.md
-      #   run: |
-      #     git config --global user.name "github-actions[bot]"
-      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      #     git add CHANGELOG.md
-      #     git commit -m "chore: update CHANGELOG.md"
-      #     git push origin release/${{ github.ref_name }}
+          # Slack에 메시지 전송
+          curl -X POST -H 'Content-type: application/json' --data "$slack_payload" ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      #     cat ./github/template/slack_message_template.json | \
+      #     jq --arg branch_name "$branch_name" \
+      #     > ./github/slack_message.json
+
+      # - name: Send Slack Message
+      #   uses: slackapi/slack-github-action@v1.24.0
+      #   with:
+      #     channel-id: ${{ secrets.TEST_CHANNEL_ID }}
+      #     payload: file://slack_message.json
+      #   env:
+      #     SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
