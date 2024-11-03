@@ -18,17 +18,140 @@ jobs:
         with:
           node-version: '18.20.0'
 
-      - name: Install dependencies
-        run: yarn install
+  slack-alarm:
+    runs-on: ubuntu-latest
 
-      - name: Run Lerna version
-        run: yarn version
+    steps:
+      - name: slack 메시지 전송
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: ${{ secrets.TEST_CHANNEL_ID }}
+          payload: |
+            {
+              "text": "release message",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "00 스프린트 릴리즈 열차가 도착했습니다 🚂",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "브랜치: <https://www.goorm.io/dashboard|release/20241103>"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "rich_text",
+                  "elements": [
+                    {
+                      "type": "rich_text_section",
+                      "elements": [
+                        {
+                          "type": "text",
+                          "text": "00 스프린트에는 ...",
+                          "style": {
+                            "bold": true
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "text": "\n\n"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rich_text_list",
+                      "style": "bullet",
+                      "indent": 0,
+                      "border": 0,
+                      "elements": [
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rich_text_section",
+                          "elements": [
+                            {
+                              "type": "text",
+                              "text": "업데이트1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "승인"
+                      },
+                      "style": "primary",
+                      "value": "accept release"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "거절"
+                      },
+                      "style": "danger",
+                      "value": "reject release"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
+      # - name: Install dependencies
+      #   run: yarn install
 
-      - name: Commit and push CHANGELOG.md
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git commit -m "chore: update CHANGELOG.md"
-          git push origin release/${{ github.ref_name }}
+      # - name: Run Lerna version
+      #   run: yarn version
 
+      # - name: Commit and push CHANGELOG.md
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add CHANGELOG.md
+      #     git commit -m "chore: update CHANGELOG.md"
+      #     git push origin release/${{ github.ref_name }}
