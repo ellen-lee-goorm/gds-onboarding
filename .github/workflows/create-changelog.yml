@@ -46,10 +46,10 @@ jobs:
         id: get_date
         run: |
           echo "today_date=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
-          echo "Today date is: ${{ env.today_date }}"
 
       - name: Start Release with git flow
         run: |
+          echo "Today date is: ${{ env.today_date }}"
           git flow init -d
           git flow release start ${{ env.today_date }}
           yarn version --yes
@@ -74,7 +74,7 @@ jobs:
           branch_name="${{ github.ref_name }}"
 
           slack_payload=$(jq --arg branch_name "$branch_name" \
-            < ./.github/template/slack_message_template.json | \
+            < .github/template/slack_message_template.json | \
             jq '.blocks[1].text.text |= gsub("{{branch_name}}"; $branch_name)')
 
 
