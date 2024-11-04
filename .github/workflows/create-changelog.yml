@@ -59,7 +59,7 @@ jobs:
           echo "Today date is: ${{ env.today_date }}"
           git flow init -d
           echo "Done: git flow init"
-          git flow release -F start ${{ env.today_date }}
+          git flow release start -F ${{ env.today_date }}
           echo "Done: git flow release start"
           git flow release publish ${{ env.today_date }}
           echo "Done: git flow release publish"
