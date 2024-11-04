@@ -1,0 +1,113 @@
+{
+  "text": "release message",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "{{sprint_number}} 스프린트 릴리즈 열차가 출발합니다 🚂",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{branch_name}}|release/${{branch_name}}>"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "rich_text",
+      "elements": [
+        {
+          "type": "rich_text_section",
+          "elements": [
+            {
+              "type": "text",
+              "text": "{{sprint_number}} 스프린트에는 ...",
+              "style": {
+                "bold": true
+              }
+            },
+            {
+              "type": "text",
+              "text": "\n\n"
+            }
+          ]
+        },
+        {
+          "type": "rich_text_list",
+          "style": "bullet",
+          "indent": 0,
+          "border": 0,
+          "elements": [
+            {
+              "type": "rich_text_section",
+              "elements": [
+                {
+                  "type": "text",
+                  "text": "업데이트1"
+                }
+              ]
+            },
+            {
+              "type": "rich_text_section",
+              "elements": [
+                {
+                  "type": "text",
+                  "text": "업데이트1"
+                }
+              ]
+            },
+            {
+              "type": "rich_text_section",
+              "elements": [
+                {
+                  "type": "text",
+                  "text": "업데이트1"
+                }
+              ]
+            },
+            {
+              "type": "rich_text_section",
+              "elements": [
+                {
+                  "type": "text",
+                  "text": "업데이트1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "emoji": true,
+            "text": "승인"
+          },
+          "style": "primary",
+          "value": "accept release"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "emoji": true,
+            "text": "거절"
+          },
+          "style": "danger",
+          "value": "reject release"
+        }
+      ]
+    }
+  ]
+}

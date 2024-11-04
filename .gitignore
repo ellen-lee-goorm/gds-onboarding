@@ -1,0 +1,18 @@
+# node 의존성
+node_modules
+
+# build ouptut
+dist
+
+# log
+*.log
+
+# 환경변수
+.env
+
+# etc
+.DS_Store
+.vscode/
+
+*storybook.log
+storybook-static
