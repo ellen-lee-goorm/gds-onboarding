@@ -46,9 +46,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git-flow
 
-      - name: Install Dependencies
-        run: yarn install
-
       - name: Get today's date
         id: get_date
         run: |
