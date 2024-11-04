@@ -21,6 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+        # 브랜치 최신화
       - name: Update remote branches
         run: git remote update
 
@@ -39,6 +40,7 @@ jobs:
         with:
           node-version: '18.20.0'
 
+      # 릴리즈 브랜치 생성
       - name: Install git flow
         run: |
           sudo apt-get update
@@ -57,11 +59,11 @@ jobs:
           echo "Today date is: ${{ env.today_date }}"
           git flow init -d
           echo "Done: git flow init"
-          git flow release start ${{ env.today_date }}
+          git flow release -F start ${{ env.today_date }}
           echo "Done: git flow release start"
           git flow release publish ${{ env.today_date }}
           echo "Done: git flow release publish"
-          yarn version --yes
+          yarn version
           echo "Done: yarn version"
 
       - name: Commit and push CHANGELOG.md
@@ -72,10 +74,6 @@ jobs:
           git commit -m "chore: update CHANGELOG.md"
           git push origin release/${{ github.ref_name }}
 
-  slack-alarm:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Send Slack Message
         uses: slackapi/slack-github-action@v1.24.0
         with:
