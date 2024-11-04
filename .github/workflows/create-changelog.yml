@@ -96,7 +96,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{ github.ref_name }}|release/${{ github.ref_name }}>"
+                    "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/${{ github.ref_name }}|${{ github.ref_name }}>"
                   }
                 },
                 {
