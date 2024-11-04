@@ -51,9 +51,6 @@ jobs:
         run: |
           echo "today_date=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
 
-      - name: Install Dependecies
-        run: yarn install
-
       - name: Start Release with git flow
         run: |
           echo "Today date is: ${{ env.today_date }}"
