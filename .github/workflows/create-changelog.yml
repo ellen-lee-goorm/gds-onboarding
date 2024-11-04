@@ -60,7 +60,7 @@ jobs:
           echo "Done: git flow release start"
           git flow release publish ${{ env.today_date }}
           echo "Done: git flow release publish"
-          yarn version
+          yarn run version
           echo "Done: yarn version"
 
       - name: Commit and push CHANGELOG.md
