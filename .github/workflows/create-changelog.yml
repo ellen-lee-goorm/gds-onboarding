@@ -55,13 +55,8 @@ jobs:
         run: |
           echo "Today date is: ${{ env.today_date }}"
           git flow init -d
-          echo "Done: git flow init"
-          git flow release start -F ${{ env.today_date }}
-          echo "Done: git flow release start"
-          git flow release publish ${{ env.today_date }}
-          echo "Done: git flow release publish"
+          git flow release start -F ${{ env.today_date }} # release 브랜치 생성
           yarn run version
-          echo "Done: yarn version"
 
       - name: Commit and push CHANGELOG.md
         run: |
@@ -69,7 +64,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add CHANGELOG.md
           git commit -m "chore: update CHANGELOG.md"
-          git push origin release/${{ env.today_date }}
+          git flow release publish ${{ env.today_date }} # 생성한 release 브랜치 원격에 push
 
       - name: Send Slack Message
         uses: slackapi/slack-github-action@v1.24.0
@@ -91,7 +86,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/${{ github.ref_name }}|${{ github.ref_name }}>"
+                    "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{ env.today_date }}|release/${{ env.today_date }}>"
                   }
                 },
                 {
