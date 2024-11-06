@@ -142,7 +142,7 @@ jobs:
                 ]
               }
             ]
-          }" "${{ secrets.SLACK_WEB_HOOK }}"
+          }" "${{ secrets.SLACK_WEBHOOK_URL }}"
 
       # - name: Send Slack Message
       #   uses: slackapi/slack-github-action@v1.24.0
