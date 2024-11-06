@@ -179,6 +179,6 @@ jobs:
       #     SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
 
       # 릴리즈 브랜치 닫기
-      - name: Publish Release Branch
-        run: |
-          git flow release finish -Fpn ${{ env.TODAY_DATE }}
+      # - name: Publish Release Branch
+      #   run: |
+      #     git flow release finish -Fpn ${{ env.TODAY_DATE }}
