@@ -77,13 +77,13 @@ jobs:
           # 마크다운 URL을 Slack 포맷 URL로 변환
           CHANGELOG=$(echo "$CHANGELOG" | sed -E 's/\\?([[][^]]+]\\?)\\?[(]([^()]+)\\?[)]/<\2|\1>/g')
 
+          #FIXME - test echo changelog
+          echo "$CHANGELOG"
+
           # 수정된 변경로그를 환경 파일에 작성
           echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
           echo "$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-
-          #FIXME - test echo changelog
-          echo "$CHANGELOG"
 
       - name: Get current package version
         id: package-version
