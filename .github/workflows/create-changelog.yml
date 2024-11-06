@@ -82,6 +82,10 @@ jobs:
           echo "$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+          #FIXME - test echo changelog
+          echo "CHANGELOG: ${{env.CHANGELOG}}"
+          echo "CHANGELOG_CONTENT ${{env.CHANGELOG_CONTENT}}"
+
       - name: Get current package version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.2.3
@@ -148,15 +152,15 @@ jobs:
                 {
                   "type": "actions",
                   "elements": {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "emoji": true,
-                        "text": "승인"
-                      },
-                      "style": "primary",
-                      "value": "accept release"
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "emoji": true,
+                      "text": "승인"
                     },
+                    "style": "primary",
+                    "value": "accept release"
+                  },
                 }
               ]
             }
