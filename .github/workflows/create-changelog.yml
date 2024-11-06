@@ -71,11 +71,17 @@ jobs:
           # 최근 '##' 헤더부터 이전 '##' 헤더까지 내용을 CHANGELOG.md에서 추출
           CHANGELOG=$(awk '/^## \[/{if (found) exit; found=1} found' CHANGELOG.md)
 
+          echo "GET CHANGELOG: $CHANGELOG"
+
           # 마크다운 타이틀을 Slack에서 굵게로 변환
           CHANGELOG=$(echo "$CHANGELOG" | sed -E 's/^##+ (.+)/*\1*/')
 
+          echo "TITLE TO BOLD: $CHANGELOG"
+
           # 마크다운 URL을 Slack 포맷 URL로 변환
           CHANGELOG=$(echo "$CHANGELOG" | sed -E 's/\\?([[][^]]+]\\?)\\?[(]([^()]+)\\?[)]/<\2|\1>/g')
+
+          echo "CONVERT TO SLACK FORMAT: $CHANGELOG"
 
           #FIXME - test echo changelog
           echo "$CHANGELOG"
