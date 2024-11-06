@@ -56,7 +56,8 @@ jobs:
           git flow init -d
           git flow release start -F ${{ env.TODAY_DATE }}
 
-          echo "current branch: ${{github.ref}}"
+          echo "current branch: ${{github.ref}} ${{github.action_ref}}"
+          git branch
 
           # FIXME - 만약 feat가 없다면? 
           git config --global user.name "github-actions[bot]"
@@ -98,7 +99,7 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.2.3
         with:
-          path: packages/my-components/
+          path: packages/my-components
 
       # - name: Send to Slack via Webhook
       #   env:
