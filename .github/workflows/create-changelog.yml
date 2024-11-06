@@ -56,9 +56,6 @@ jobs:
           git flow init -d
           git flow release start -F ${{ env.TODAY_DATE }}
 
-          echo "current branch: ${{github.ref}} ${{github.action_ref}}"
-          git branch
-
           # FIXME - 만약 feat가 없다면? 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -68,11 +65,24 @@ jobs:
           git flow release publish ${{ env.TODAY_DATE }}
           yarn run version
 
+      - name: Verify and Download CHANGELOG.md
+        run: |
+          if [ -f "CHANGELOG.md" ]; then
+            echo "CHANGELOG.md found in repository."
+          else
+            echo "CHANGELOG.md not found."
+            exit 1
+          fi
+          cat CHANGELOG.md
+
       # 이번 스프린트 작업 내역 파싱(릴리즈 노트를 위한 내용)
       - name: Read the latest minor CHANGELOG entry
         run: |
+          # FIXME - CHANGELOG.md 가져와서 echo
+          awk '{print}' CHANGELOG.md
+
           # 최근 '##' 헤더부터 이전 '##' 헤더까지 내용을 CHANGELOG.md에서 추출
-          CHANGELOG=$(awk '/^## \[/{if (found) exit; found=1} found' CHANGELOG.md)
+          CHANGELOG=$(awk '/^## \[/{if (found) exit; found=1} found{print}' CHANGELOG.md)
 
           echo "GET CHANGELOG: $CHANGELOG"
 
