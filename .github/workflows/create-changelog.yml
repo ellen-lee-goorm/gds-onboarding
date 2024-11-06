@@ -56,6 +56,8 @@ jobs:
           git flow init -d
           git flow release start -F ${{ env.TODAY_DATE }}
 
+          echo "current branch: ${{github.ref}}"
+
           # FIXME - 만약 feat가 없다면? 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -64,9 +66,6 @@ jobs:
 
           git flow release publish ${{ env.TODAY_DATE }}
           yarn run version
-          git add CHANGELOG.md
-          git commit -m "chore: update CHANGELOG.md"
-          git push origin release/${{ env.TODAY_DATE }}
 
       # 이번 스프린트 작업 내역 파싱(릴리즈 노트를 위한 내용)
       - name: Read the latest minor CHANGELOG entry
