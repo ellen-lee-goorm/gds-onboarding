@@ -108,30 +108,41 @@ jobs:
           CHANGELOG_CONTENT: ${{ env.CHANGELOG_CONTENT }}
         run: |
           # JSON 구문 오류를 방지하기 위해 변경로그 내용의 이중 따옴표를 이스케이프
-          ESCAPED_CHANGELOG_CONTENT=$(echo "$CHANGELOG_CONTENT" | sed 's/\^H//g' | sed 's/"/\\"/g')
+          ESCAPED_CHANGELOG_CONTENT=$(echo "$CHANGELOG_CONTENT" | sed -E 's/^/- /')
 
           # 결합된 메시지를 Slack으로 전송
           curl -X POST --data-urlencode "payload={
-          \"username\": \"release-bot\",
-          \"attachments\": [
+            \"username\": \"release-bot\",
+            \"attachments\": [
               {
-              \"pretext\": \" ${{ steps.package-version.outputs.current-version }} 버전의 릴리즈 노트를 작성해주세요. (<https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/20241106| 릴리즈 브랜치>) \",
-              \"color\": \"#5094FA\",
+                \"pretext\": \" ${{ steps.package-version.outputs.current-version }} 버전의 릴리즈 노트를 작성해주세요 ✍️ \",
+                \"color\": \"#5094FA\",
+                \"emoji\": true
               },
               {
-              \"color\": \"#36a64f\",
-              \"blocks\": [
+                \"color\": \"#36a64f\",
+                \"blocks\": [
                   {
-                  \"type\": \"section\",
-                  \"text\": {
+                    \"type\": \"section\",
+                    \"text\": {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"<https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{env.TODAY_DATE}}|release/${{env.TODAY_DATE}}/>\"
+                    }
+                  },
+                  {
+                    \"type\": \"divider\"
+                  },
+                  {
+                    \"type\": \"section\",
+                    \"text\": {
                       \"type\": \"mrkdwn\",
                       \"text\": \"${ESCAPED_CHANGELOG_CONTENT}\"
+                    }
                   }
-                  }
-              ]
+                ]
               }
-          ]
-          }" "${{ secrets.SLACK_WEBHOOK_URL }}"
+            ]
+          }" "${{ secrets.SLACK_WEB_HOOK }}"
 
       # - name: Send Slack Message
       #   uses: slackapi/slack-github-action@v1.24.0
