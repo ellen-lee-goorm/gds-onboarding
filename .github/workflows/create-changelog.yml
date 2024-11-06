@@ -59,7 +59,8 @@ jobs:
           # FIXME - 만약 feat가 없다면? 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "feat: release"
+
+          git commit --allow-empty -m "feat: release"
 
           git flow release publish ${{ env.TODAY_DATE }}
           yarn run version
