@@ -80,7 +80,7 @@ jobs:
         run: |
           # FIXME - CHANGELOG.md 가져와서 echo
           echo "추출한 changelog 출력"
-          awk '/^## \[|^### \[/{if (++count==2) exit} count{print}' CHANGELOG.md
+          awk '/^## /{if (found) exit; found=1} found{print}' CHANGELOG.md
 
           # 최근 '##' 헤더부터 이전 '##' 헤더까지 내용을 CHANGELOG.md에서 추출
           CHANGELOG=$(awk '/^## \[/{if (found) exit; found=1} found{print}' CHANGELOG.md)
