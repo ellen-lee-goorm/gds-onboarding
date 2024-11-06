@@ -83,8 +83,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
           #FIXME - test echo changelog
-          echo "CHANGELOG: ${{env.CHANGELOG}}"
-          echo "CHANGELOG_CONTENT ${{env.CHANGELOG_CONTENT}}"
+          echo "$CHANGELOG"
 
       - name: Get current package version
         id: package-version
