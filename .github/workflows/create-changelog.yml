@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-        # 브랜치 최신화
+      # 브랜치 최신화
       - name: Update remote branches
         run: git remote update
 
@@ -40,7 +40,6 @@ jobs:
         with:
           node-version: '18.20.0'
 
-      # 릴리즈 브랜치 생성
       - name: Install git flow
         run: |
           sudo apt-get update
@@ -49,22 +48,75 @@ jobs:
       - name: Get today's date
         id: get_date
         run: |
-          echo "today_date=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
+          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
 
-      - name: Start Release with git flow
+      # 릴리즈 브랜치 생성
+      - name: Start Release with git flow and lerna version
         run: |
           git flow init -d
-          git flow release start -F ${{ env.today_date }}
-          git flow release publish ${{ env.today_date }}
-          yarn run version
+          git flow release start -F ${{ env.TODAY_DATE }}
 
-      - name: Commit and push CHANGELOG.md
-        run: |
+          # FIXME - 만약 feat가 없다면? 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git commit -m "chore: update CHANGELOG.md"
-          git push origin release/${{ env.today_date }}
+          git commit -m "feat: release"
+
+          git flow release publish ${{ env.TODAY_DATE }}
+          yarn run version
+
+      # 이번 스프린트 작업 내역 파싱(릴리즈 노트를 위한 내용)
+      - name: Read the latest minor CHANGELOG entry
+        run: |
+          # 최근 '##' 헤더부터 이전 '##' 헤더까지 내용을 CHANGELOG.md에서 추출
+          CHANGELOG=$(awk '/^## \[/{if (found) exit; found=1} found' CHANGELOG.md)
+
+          # 마크다운 타이틀을 Slack에서 굵게로 변환
+          CHANGELOG=$(echo "$CHANGELOG" | sed -E 's/^##+ (.+)/*\1*/')
+
+          # 마크다운 URL을 Slack 포맷 URL로 변환
+          CHANGELOG=$(echo "$CHANGELOG" | sed -E 's/\\?([[][^]]+]\\?)\\?[(]([^()]+)\\?[)]/<\2|\1>/g')
+
+          # 수정된 변경로그를 환경 파일에 작성
+          echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Get current package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.2.3
+        with:
+          path: packages/my-components/
+
+      # - name: Send to Slack via Webhook
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK }}
+      #     CHANGELOG_CONTENT: ${{ env.CHANGELOG_CONTENT }}
+      #   run: |
+      #     # JSON 구문 오류를 방지하기 위해 변경로그 내용의 이중 따옴표를 이스케이프
+      #     ESCAPED_CHANGELOG_CONTENT=$(echo "$CHANGELOG_CONTENT" | sed 's/\^H//g' | sed 's/"/\\"/g')
+
+      #     # 결합된 메시지를 Slack으로 전송
+      #     curl -X POST --data-urlencode "payload={
+      #     \"username\": \"GDS-bot\",
+      #     \"attachments\": [
+      #         {
+      #         \"pretext\": \"*@vapor-alarm* Vapor Packages ${{ steps.package-version.outputs.current-version }}(<https://vapor.goorm.io/guides/change-log| changelog>)가 릴리즈 됐습니다 :tada:\",
+      #         \"color\": \"#5094FA\",
+      #         },
+      #         {
+      #         \"color\": \"#36a64f\",
+      #         \"blocks\": [
+      #             {
+      #             \"type\": \"section\",
+      #             \"text\": {
+      #                 \"type\": \"mrkdwn\",
+      #                 \"text\": \"${ESCAPED_CHANGELOG_CONTENT}\"
+      #             }
+      #             }
+      #         ]
+      #         }
+      #     ]
+      #     }" "${{ secrets.SLACK_WEB_HOOK }}"
 
       - name: Send Slack Message
         uses: slackapi/slack-github-action@v1.24.0
@@ -78,7 +130,7 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "${{github.event.inputs.sprint_number}} 스프린트 릴리즈 열차가 출발합니다 🚂",
+                    "text": "이번 스프린트 릴리즈 노트를 작성해주세요",
                     "emoji": true
                   }
                 },
@@ -86,81 +138,15 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "브랜치: <https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{ env.today_date }}|release/${{ env.today_date }}>"
+                    "text": "릴리즈 브랜치: <|>"
                   }
                 },
                 {
                   "type": "divider"
                 },
                 {
-                  "type": "rich_text",
-                  "elements": [
-                    {
-                      "type": "rich_text_section",
-                      "elements": [
-                        {
-                          "type": "text",
-                          "text": "${{github.event.inputs.sprint_number}} 스프린트에는 ...",
-                          "style": {
-                            "bold": true
-                          }
-                        },
-                        {
-                          "type": "text",
-                          "text": "\n\n"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "rich_text_list",
-                      "style": "bullet",
-                      "indent": 0,
-                      "border": 0,
-                      "elements": [
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "rich_text_section",
-                          "elements": [
-                            {
-                              "type": "text",
-                              "text": "업데이트1"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
                   "type": "actions",
-                  "elements": [
-                    {
+                  "elements": {
                       "type": "button",
                       "text": {
                         "type": "plain_text",
@@ -170,20 +156,14 @@ jobs:
                       "style": "primary",
                       "value": "accept release"
                     },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "emoji": true,
-                        "text": "거절"
-                      },
-                      "style": "danger",
-                      "value": "reject release"
-                    }
-                  ]
                 }
               ]
             }
 
         env:
           SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
+
+      # 릴리즈 브랜치 닫기
+      - name: Publish Release Branch
+        run: |
+          git flow release finish -Fpn ${{ env.TODAY_DATE }}
