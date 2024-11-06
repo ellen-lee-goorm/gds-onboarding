@@ -113,80 +113,49 @@ jobs:
           # 결합된 메시지를 Slack으로 전송
           curl -X POST --data-urlencode "payload={
             \"username\": \"release-bot\",
-            \"attachments\": [
+            \"blocks\": [
               {
-                \"pretext\": \" ${{ steps.package-version.outputs.current-version }} 버전의 릴리즈 노트를 작성해주세요 ✍️ \",
-                \"color\": \"#5094FA\",
-                \"emoji\": true
+                \"type\": \"header\",
+                \"text\": {
+                  \"type\": \"plain_text\",
+                  \"text\": \"${{ steps.package-version.outputs.current-version }} 버전의 릴리즈 노트를 작성해주세요 ✍️\",
+                  \"emoji\": true
+                }
               },
               {
-                \"blocks\": [
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"<https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{env.TODAY_DATE}}|release/${{env.TODAY_DATE}}>\"
+                }
+              },
+              {
+                \"type\": \"divider\"
+              },
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"d\"
+                }
+              },
+              {
+                \"type\": \"actions\",
+                \"elements\": [
                   {
-                    \"type\": \"section\",
+                    \"type\": \"button\",
                     \"text\": {
-                      \"type\": \"mrkdwn\",
-                      \"text\": \"<https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{env.TODAY_DATE}}|release/${{env.TODAY_DATE}}>\"
-                    }
-                  },
-                  {
-                    \"type\": \"divider\"
-                  },
-                  {
-                    \"type\": \"section\",
-                    \"text\": {
-                      \"type\": \"mrkdwn\",
-                      \"text\": \"${ESCAPED_CHANGELOG_CONTENT}\"
-                    }
+                      \"type\": \"plain_text\",
+                      \"text\": \"완료\",
+                      \"emoji\": true
+                    },
+                    \"value\": \"complete_release\",
+                    \"action_id\": \"actionId-0\"
                   }
                 ]
               }
             ]
           }" "${{ secrets.SLACK_WEBHOOK_URL }}"
-
-      # - name: Send Slack Message
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     channel-id: ${{ secrets.TEST_CHANNEL_ID }}
-      #     payload: |
-      #       {
-      #         "text": "release message",
-      #         "blocks": [
-      #           {
-      #             "type": "header",
-      #             "text": {
-      #               "type": "plain_text",
-      #               "text": "이번 스프린트 릴리즈 노트를 작성해주세요",
-      #               "emoji": true
-      #             }
-      #           },
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "릴리즈 브랜치: <|>"
-      #             }
-      #           },
-      #           {
-      #             "type": "divider"
-      #           },
-      #           {
-      #             "type": "actions",
-      #             "elements": {
-      #               "type": "button",
-      #               "text": {
-      #                 "type": "plain_text",
-      #                 "emoji": true,
-      #                 "text": "승인"
-      #               },
-      #               "style": "primary",
-      #               "value": "accept release"
-      #             },
-      #           }
-      #         ]
-      #       }
-
-      #   env:
-      #     SLACK_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
 
       # 릴리즈 브랜치 닫기
       # - name: Publish Release Branch
