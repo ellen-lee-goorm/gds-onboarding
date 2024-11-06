@@ -64,6 +64,9 @@ jobs:
 
           git flow release publish ${{ env.TODAY_DATE }}
           yarn run version
+          git add CHANGELOG.md
+          git commit -m "chore: update CHANGELOG.md"
+          git push origin release/${{ env.today_date }}
 
       # 이번 스프린트 작업 내역 파싱(릴리즈 노트를 위한 내용)
       - name: Read the latest minor CHANGELOG entry
