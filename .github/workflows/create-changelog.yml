@@ -86,13 +86,14 @@ jobs:
 
           echo "CONVERT TO SLACK FORMAT: $CHANGELOG"
 
-          #FIXME - test echo changelog
-          echo "$CHANGELOG"
-
           # 수정된 변경로그를 환경 파일에 작성
           echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
           echo "$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+
+          #FIXME - test echo changelog
+          echo "changelog: $CHANGELOG"
+          echo "changelog env: ${{env.CHANGELOG}}"
 
       - name: Get current package version
         id: package-version
