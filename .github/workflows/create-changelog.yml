@@ -166,7 +166,7 @@ jobs:
       # release-start 가 완료됐을 때
       release-start
     # 봇에서 repository_dispatch 받았을 때
-    if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload }}
+    if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.clicked }}
 
     steps:
       - name: event 확인
