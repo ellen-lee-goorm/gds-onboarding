@@ -169,13 +169,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 브랜치 최신화
+      - name: Update remote branches
+        run: git remote update
+
+      - name: Checkout and update develop branch
+        run: |
+          git checkout develop
+          git pull origin develop
+
+      - name: Checkout and update master branch
+        run: |
+          git checkout master
+          git pull origin master
+
       - name: Install git flow
         run: |
           sudo apt-get update
           sudo apt-get install -y git-flow
-          git flow init -d
 
       # 릴리즈 브랜치 닫기
       - name: Publish Release Branch
         run: |
+          git flow init -d
           git flow release finish -Fpn ${{ env.TODAY_DATE }}
