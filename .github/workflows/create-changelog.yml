@@ -21,12 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: actor 확인
-        run: |
-          echo "actor: ${{github.actor}}"
-          echo "event_name: ${{github.event_name}}"
-          echo "event_name: ${{github.event_path}}"
-
       # 브랜치 최신화
       - name: Update remote branches
         run: git remote update
@@ -169,7 +163,7 @@ jobs:
       # release-start 가 완료됐을 때
       release-start
     # 봇에서 repository_dispatch 받았을 때
-    # if:
+    if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload }}
 
     steps:
       - name: event 확인
