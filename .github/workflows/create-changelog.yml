@@ -192,4 +192,5 @@ jobs:
       - name: Publish Release Branch
         run: |
           git flow init -d
+          git checkout release/${{ env.TODAY_DATE }}
           git flow release finish -Fpn ${{ env.TODAY_DATE }}
