@@ -14,7 +14,7 @@ on:
   #     - 'release/*'
 
 jobs:
-  release:
+  release-start:
     runs-on: ubuntu-latest
 
     steps:
@@ -60,7 +60,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git commit --allow-empty -m "feat: release"
+          git commit --allow-empty -m "feat: 정기 릴리즈를 위한 커밋"
 
           git flow release publish ${{ env.TODAY_DATE }}
           yarn run version
@@ -150,12 +150,25 @@ jobs:
                       \"emoji\": true
                     },
                     \"value\": \"complete_release\",
-                    \"action_id\": \"actionId-0\"
+                    \"action_id\": \"complete_write_release_note\"
                   }
                 ]
               }
             ]
           }" "${{ secrets.SLACK_WEBHOOK_URL }}"
+
+  release-finish:
+    runs-on: ubuntu-latest
+    needs:
+      # release-start 가 완료됐을 때
+      release-start
+    # 봇에서 repository_dispatch 받았을 때
+    # if:
+
+    steps:
+      - name: event 확인
+        run: |
+          echo "${{ github.event }}"
 
       # 릴리즈 브랜치 닫기
       # - name: Publish Release Branch
