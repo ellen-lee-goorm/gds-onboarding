@@ -173,6 +173,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y git-flow
+          git flow init -d
 
       # 릴리즈 브랜치 닫기
       - name: Publish Release Branch
