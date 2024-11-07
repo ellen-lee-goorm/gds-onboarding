@@ -7,6 +7,8 @@ on:
         description: '스프린트 번호'
         required: true
         default: '90'
+  repository_dispatch:
+    types: [on_click_complete]
   # schedule:
   #   - cron: "0 9 * * 1"  # 예: 매주 월요일 오전 9시에 실행 (UTC 기준)
   # push:
@@ -16,6 +18,7 @@ on:
 jobs:
   release-start:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
 
     steps:
       - name: Checkout repository
