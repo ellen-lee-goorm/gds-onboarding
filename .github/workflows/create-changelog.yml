@@ -160,13 +160,8 @@ jobs:
             ]
           }" "${{ secrets.SLACK_WEBHOOK_URL }}"
 
-  release-finish:
-    runs-on: ubuntu-latest
-    # 봇에서 repository_dispatch 받았을 때
-    if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.clicked}}
-
-    steps:
       # 릴리즈 브랜치 닫기
       - name: Publish Release Branch
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.clicked}}
         run: |
           git flow release finish -Fpn ${{ env.TODAY_DATE }}
