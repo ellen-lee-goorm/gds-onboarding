@@ -168,7 +168,7 @@ jobs:
     steps:
       - name: event 확인
         run: |
-          echo "${{ github.event }}"
+          echo "${{ github.event.inputs.clickedComplete }}"
 
       # 릴리즈 브랜치 닫기
       # - name: Publish Release Branch
