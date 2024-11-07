@@ -188,6 +188,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git-flow
 
+      - name: Get today's date
+        id: get_date
+        run: |
+          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
+
       # 릴리즈 브랜치 닫기
       - name: Publish Release Branch
         run: |
