@@ -136,7 +136,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"d\"
+                  \"text\": \"${ESCAPED_CHANGELOG_CONTENT}\"
                 }
               },
               {
