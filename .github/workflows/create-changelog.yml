@@ -162,9 +162,9 @@ jobs:
 
   release-finish:
     runs-on: ubuntu-latest
-    needs:
-      # release-start 가 완료됐을 때
-      release-start
+    # needs:
+    # release-start 가 완료됐을 때
+    # release-start
     # 봇에서 repository_dispatch 받았을 때
     if: ${{ github.event_name == 'repository_dispatch' }}
 
