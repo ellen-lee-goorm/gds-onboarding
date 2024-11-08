@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.1 (2024-11-08)
+
+
+### Bug Fixes
+
+* 릴리즈 브랜치 이름 index 0 추가 ([9000944](https://github.com/ellen-lee-goorm/gds-onboarding/commit/900094407f3d71fdd9907391dae78377d31c5ed5))
+
+
+### Features
+
+* 정기 릴리즈를 위한 커밋 ([af19d80](https://github.com/ellen-lee-goorm/gds-onboarding/commit/af19d809a91337598a1a297b2e28dc5ecb718cc8))
+
+
+
+
+
 ## 1.1.0 (2024-11-03)
 
 
