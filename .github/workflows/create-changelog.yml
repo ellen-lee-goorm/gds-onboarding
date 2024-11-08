@@ -53,8 +53,7 @@ jobs:
 
       - name: Get Release branch's name
         run: |
-          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" 
-          echo "RELEASE_BRANCH_NAME=${TODAY_DATE}/${{github.event.inputs.sprint_number}}sp">> $GITHUB_ENV
+          echo "RELEASE_BRANCH_NAME=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
 
       # 릴리즈 브랜치 생성
       - name: Start Release with git flow and lerna version
@@ -189,8 +188,7 @@ jobs:
 
       - name: Get Release branch's name
         run: |
-          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" 
-          echo "RELEASE_BRANCH_NAME=${TODAY_DATE}/${{github.event.inputs.sprint_number}}sp">> $GITHUB_ENV
+          echo "RELEASE_BRANCH_NAME=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
 
       - name: Set Git user info
         run: |
