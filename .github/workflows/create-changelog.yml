@@ -7,8 +7,11 @@ on:
         description: '스프린트 번호'
         required: true
         default: '90'
+      index:
+        description: '릴리즈 브랜치의 index'
+        default: '1'
   repository_dispatch:
-    types: [on_click_complete]
+    types: [릴리즈 완료]
   # schedule:
   #   - cron: "0 9 * * 1"  # 예: 매주 월요일 오전 9시에 실행 (UTC 기준)
   # push:
@@ -48,16 +51,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git-flow
 
-      - name: Get today's date
-        id: get_date
+      - name: Get Release branch's name
         run: |
-          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
+          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" 
+          echo "RELEASE_BRANCH_NAME=${TODAY_DATE}/${{github.event.inputs.sprint_number}}sp">> $GITHUB_ENV
 
       # 릴리즈 브랜치 생성
       - name: Start Release with git flow and lerna version
         run: |
           git flow init -d
-          git flow release start -F ${{ env.TODAY_DATE }}
+          git flow release start -F ${{ env.RELEASE_BRANCH_NAME }}
 
           # FIXME - 만약 feat가 없다면? 
           git config --global user.name "github-actions[bot]"
@@ -65,7 +68,7 @@ jobs:
 
           git commit --allow-empty -m "feat: 정기 릴리즈를 위한 커밋"
 
-          git flow release publish ${{ env.TODAY_DATE }}
+          git flow release publish ${{ env.RELEASE_BRANCH_NAME }}
           yarn run version
 
       - name: Verify and Download CHANGELOG.md
@@ -81,10 +84,6 @@ jobs:
       # 이번 스프린트 작업 내역 파싱(릴리즈 노트를 위한 내용)
       - name: Read the latest minor CHANGELOG entry
         run: |
-          # FIXME - CHANGELOG.md 가져와서 echo
-          echo "추출한 changelog 출력"
-          awk '/^## /{if (found) exit; found=1} found{print}' CHANGELOG.md
-
           # 최근 '##' 헤더부터 이전 '##' 헤더까지 내용을 CHANGELOG.md에서 추출
           CHANGELOG=$(awk '/^## /{if (found) exit; found=1} found{print}' CHANGELOG.md)
 
@@ -129,7 +128,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"<https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{env.TODAY_DATE}}|release/${{env.TODAY_DATE}}>\"
+                  \"text\": \"<https://github.com/ellen-lee-goorm/gds-onboarding/tree/release/${{env.RELEASE_BRANCH_NAME}}|release/${{env.RELEASE_BRANCH_NAME}}>\"
                 }
               },
               {
@@ -188,10 +187,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git-flow
 
-      - name: Get today's date
-        id: get_date
+      - name: Get Release branch's name
         run: |
-          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" >> $GITHUB_ENV
+          echo "TODAY_DATE=$(node -e 'const today = new Date(); console.log(`${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`)')" 
+          echo "RELEASE_BRANCH_NAME=${TODAY_DATE}/${{github.event.inputs.sprint_number}}sp">> $GITHUB_ENV
 
       - name: Set Git user info
         run: |
@@ -202,5 +201,5 @@ jobs:
       - name: Publish Release Branch
         run: |
           git flow init -d
-          git checkout release/${{ env.TODAY_DATE }}
-          git flow release finish -Fpn ${{ env.TODAY_DATE }}
+          git checkout release/${{ env.RELEASE_BRANCH_NAME }}
+          git flow release finish -Fpn ${{ env.RELEASE_BRANCH_NAME }}
