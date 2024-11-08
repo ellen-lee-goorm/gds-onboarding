@@ -12,7 +12,7 @@
   "scripts": {
     "prettier": "prettier --write --config ./.prettierrc './src/**/*.{ts,tsx}'",
     "build": "lerna run build",
-    "version": "lerna version --no-git-tag-version --yes"
+    "version": "lerna version --yes"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.25.4",
