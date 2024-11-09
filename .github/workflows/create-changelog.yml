@@ -31,20 +31,23 @@ jobs:
       - name: Update remote branches
         run: git remote update
 
-      - name: Checkout and update develop branch
-        run: |
-          git checkout develop
-          git pull origin develop
-
       - name: Checkout and update master branch
         run: |
           git checkout master
           git pull origin master
 
+      - name: Checkout and update develop branch
+        run: |
+          git checkout develop
+          git pull origin develop
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18.20.0'
+
+      - name: Install Dependencies
+        run: yarn install
 
       - name: Install git flow
         run: |
